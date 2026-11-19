@@ -1,4 +1,4 @@
-/* Custom CSS Tambahan (Opsional jika ingin override Tailwind) */
+/* Styling Dasar Body & Scrollbar */
 body {
     background-color: #0f172a;
     color: #f1f5f9;
@@ -21,4 +21,156 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #64748b;
+}
+
+/* Styling Kustom Status Pintu */
+.door-locked {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+}
+
+.door-unlocked {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: #10b981 !important;
+}
+
+/* ========================================== */
+/* CUSTOM MODAL & ANIMASI INTERAKTIF          */
+/* ========================================== */
+
+/* 1. Background Overlay (Gelap + Blur) */
+.rfid-modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* 2. Kotak Modal Popup */
+.rfid-modal-box {
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 32px 24px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    width: 85%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    position: relative;
+    animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Judul & Teks Modal */
+.rfid-modal-box h3 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.rfid-modal-box p {
+    color: #94a3b8;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.rfid-modal-box p b {
+    color: #38bdf8;
+}
+
+/* 3. Container Animasi */
+.rfid-animation-container {
+    margin: 25px auto 30px auto;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Ikon Animasi */
+.rfid-card-icon {
+    font-size: 44px;
+    z-index: 2;
+    animation: tapMove 1.6s infinite ease-in-out;
+}
+
+/* Gelombang Sinyal */
+.rfid-wave {
+    position: absolute;
+    border: 2px solid #656d0a;
+    border-radius: 50%;
+    opacity: 0;
+    animation: wavePulse 1.8s infinite linear;
+}
+
+.rfid-wave:nth-child(1) { width: 45px; height: 45px; animation-delay: 0s; }
+.rfid-wave:nth-child(2) { width: 75px; height: 75px; animation-delay: 0.5s; }
+.rfid-wave:nth-child(3) { width: 105px; height: 105px; animation-delay: 1s; }
+
+/* 4. Tombol Aksi */
+.btn-close-rfid {
+    background-color: #656d0a; 
+    color: #ffffff;
+    border: 2px solid #484e07;
+    padding: 10px 32px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-close-rfid:hover {
+    background-color: #7b850c;
+    transform: translateY(-2px);
+}
+
+/* 5. Keyframes Animasi */
+@keyframes wavePulse {
+    0% {
+        transform: scale(0.4);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1.3);
+        opacity: 0;
+    }
+}
+
+@keyframes tapMove {
+    0%, 100% { 
+        transform: translateY(0) rotate(0deg); 
+    }
+    50% { 
+        transform: translateY(-10px) rotate(-6deg); 
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+    from { 
+        opacity: 0; 
+        transform: scale(0.85); 
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
 }

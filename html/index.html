@@ -19,7 +19,7 @@
         <header class="bg-slate-800 border-b border-slate-700 px-6 py-4 flex flex-wrap justify-between items-center">
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-lock text-blue-500 text-2xl"></i>
-                <h1 class="text-xl font-bold tracking-wide">Dashboard Smart Door Lock PNJ</h1>
+                <h1 class="text-xl font-bold tracking-wide">Smart Door Lock Dashboard</h1>
             </div>
             <div class="flex items-center space-x-4 mt-2 sm:mt-0">
                 <span id="user-email-display" class="text-sm text-slate-400"></span>
@@ -139,6 +139,13 @@
                                 <p class="text-[11px] text-slate-500">Memuat data...</p>
                             </div>
                         </div>
+
+                        <div>
+                            <p class="text-xs font-semibold text-blue-400 mb-1">Fingerprint Aktif (`valid_fingerprint`)</p>
+                            <div class="max-h-28 overflow-y-auto space-y-1 pr-1" id="list-fingerprint">
+                                <p class="text-[11px] text-slate-500">Memuat data...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -186,7 +193,7 @@
                 <div class="rfid-wave"></div>
                 <div class="rfid-wave"></div>
                 <div class="rfid-card-icon">
-                    <i class="fa-solid fa-id-card text-blue-400"></i>
+                    <i id="enroll-modal-icon" class="fa-solid fa-id-card text-blue-400"></i>
                 </div>
             </div>
 
@@ -259,4 +266,4 @@
     <!-- Script Utama JS -->
     <script src="../js/index.js"></script>
 </body>
-</html>
+</html>     

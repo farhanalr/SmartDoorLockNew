@@ -259,14 +259,16 @@ function initDashboardListeners() {
         btnConfirmNo.onclick = () => { tutupModalKonfirmasi(); };
     }
 
-    // G. MONITOR DAFTAR PIN DAN RFID
+    // G. MONITOR DAFTAR PIN, RFID, DAN FINGERPRINT
     const accessControlRef = db.ref('access_control');
     accessControlRef.on('value', snapshot => {
         const pinContainer = document.getElementById('list-pins');
         const rfidContainer = document.getElementById('list-rfid');
+        const fingerContainer = document.getElementById('list-fingerprint');
 
         pinContainer.innerHTML = '';
         rfidContainer.innerHTML = '';
+        if (fingerContainer) fingerContainer.innerHTML = '';
 
         const data = snapshot.val() || {};
 
@@ -289,6 +291,18 @@ function initDashboardListeners() {
                 rfidContainer.appendChild(createBadgeItem('valid_rfid', rfid, nameLabel));
             }
         }
+
+        const fingers = data.valid_fingerprint || {};
+        if (fingerContainer) {
+            if (Object.keys(fingers).length === 0) {
+                fingerContainer.innerHTML = `<p class="text-[11px] text-slate-500">Belum ada Fingerprint.</p>`;
+            } else {
+                for (const [fingerId, info] of Object.entries(fingers)) {
+                    const nameLabel = (typeof info === 'object' && info !== null && info.name) ? info.name : 'Tanpa Nama';
+                    fingerContainer.appendChild(createBadgeItem('valid_fingerprint', `ID ${fingerId}`, nameLabel, fingerId));
+                }
+            }
+        }
     }, error => {
         console.error("Gagal membaca daftar akses:", error);
     });
@@ -303,7 +317,7 @@ function initDashboardListeners() {
         }
     });
 
-    const fpCheckRef = db.ref('access_control/fingerprint');
+    const fpCheckRef = db.ref('access_control/valid_fingerprint');
     if (fpCheckRef) {
         fpCheckRef.on('child_added', () => {
             const modalRfid = document.getElementById('rfidModal');
@@ -316,10 +330,11 @@ function initDashboardListeners() {
 }
 
 // -------------------------------------------------------------
-// 7. HELPER MEMBUAT ITEM PIN / RFID
+// 7. HELPER MEMBUAT ITEM PIN / RFID / FINGERPRINT
 // -------------------------------------------------------------
 
-function createBadgeItem(category, key, ownerName) {
+function createBadgeItem(category, key, ownerName, rawKey = null) {
+    const deleteKey = rawKey || key;
     const item = document.createElement('div');
     item.className = "flex justify-between items-center bg-slate-700/50 px-3 py-1.5 rounded text-xs";
 
@@ -342,7 +357,7 @@ function createBadgeItem(category, key, ownerName) {
     deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
     deleteButton.title = "Hapus akses";
     deleteButton.addEventListener('click', () => {
-        deleteAccess(category, key);
+        deleteAccess(category, deleteKey);
     });
 
     item.appendChild(infoDiv);
@@ -351,7 +366,7 @@ function createBadgeItem(category, key, ownerName) {
 }
 
 // -------------------------------------------------------------
-// 8. HAPUS PIN / RFID
+// 8. HAPUS PIN / RFID / FINGERPRINT
 // -------------------------------------------------------------
 
 function deleteAccess(category, key) {
@@ -395,11 +410,14 @@ function updateDoorUI(status) {
 function tampilkanModalRfid(nama, mode) {
     const modal = document.getElementById('rfidModal');
     const textEl = document.getElementById('rfidModalText');
+    const iconEl = document.getElementById('enroll-modal-icon');
     
     if (mode === 'fingerprint') {
         textEl.innerHTML = `Mode pendaftaran Fingerprint diaktifkan untuk <b>[${nama}]</b>.<br>Silakan masukkan ID via Keypad perangkat.`;
+        if (iconEl) iconEl.className = "fa-solid fa-fingerprint text-blue-400";
     } else {
         textEl.innerHTML = `Mode pendaftaran RFID diaktifkan untuk <b>[${nama}]</b>.<br>Silakan tempelkan kartu pada perangkat ESP32.`;
+        if (iconEl) iconEl.className = "fa-solid fa-id-card text-blue-400";
     }
     modal.style.display = 'flex';
 }
